@@ -1,0 +1,94 @@
+﻿@page "/UploadReceipts"
+@using Microsoft.AspNetCore.Components.Forms
+@inject SmartExpenseTracker.UI.Services.ExpenseApiService ExpenseService
+
+<h3>Upload Receipts</h3>
+
+<InputFile OnChange="HandleFilesSelected"
+           multiple
+           accept=".pdf,.jpg,.jpeg,.png" />
+
+@if (!string.IsNullOrEmpty(uploadMessage))
+{
+    <p>@uploadMessage</p>
+}
+
+@if (uploads.Any())
+{
+    <div class="upload-list">
+        @foreach (var u in uploads)
+        {
+            <div class="upload-item mb-2">
+                <strong>@u.FileName</strong>
+                <div class="progress">
+                    <div class="progress-bar"
+                         role="progressbar"
+                         style="width:@u.Progress%">
+                        @u.Progress%
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<button class="btn btn-primary"
+        @onclick="UploadReceipts"
+        disabled="@(!uploads.Any())">
+    Upload Receipts
+</button>
+
+@code {
+    private List<UploadModel> uploads = new();
+    private string? uploadMessage;
+
+    private Task HandleFilesSelected(InputFileChangeEventArgs e)
+    {
+        uploads = e.GetMultipleFiles().Select(f => new UploadModel
+        {
+            File = f,
+            FileName = f.Name,
+            Progress = 0
+        }).ToList();
+
+        uploadMessage = $"{uploads.Count} file(s) selected";
+        return Task.CompletedTask;
+    }
+
+    private async Task UploadReceipts()
+    {
+        uploadMessage = "Uploading...";
+
+        int completed = 0;
+        int total = uploads.Count;
+
+        foreach (var u in uploads)
+        {
+            await ExpenseService.UploadReceiptWithProgressAsync(
+                u.File,
+                progress =>
+                {
+                    u.Progress = progress;
+                    InvokeAsync(StateHasChanged);
+                });
+
+            u.Progress = 100;
+            completed++;
+
+            await InvokeAsync(StateHasChanged);
+        }
+
+        if (completed == total)
+        {
+            uploadMessage = "All receipts uploaded successfully 🎉";
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    public class UploadModel
+    {
+        public IBrowserFile File { get; set; }
+        public string FileName { get; set; }
+        public int Progress { get; set; }
+    }
+}

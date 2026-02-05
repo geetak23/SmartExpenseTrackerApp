@@ -1,0 +1,86 @@
+﻿@page "/expensesold"
+@using Microsoft.AspNetCore.Components.Forms
+@inject SmartExpenseTracker.UI.Services.ExpenseApiService ExpenseService
+
+<h3>Upload Receipt</h3>
+
+<InputFile OnChange="HandleFileSelected"
+           accept=".pdf,.jpg,.jpeg,.png" />
+
+@if (!string.IsNullOrEmpty(uploadMessage))
+{
+    <p>@uploadMessage</p>
+}
+
+<button class="btn btn-primary"
+        @onclick="UploadReceipt"
+        disabled="@(!canUpload)">
+    Upload Receipt
+</button>
+
+<hr />
+
+<h3>Expenses</h3>
+
+@if (expenses == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ul>
+        @foreach (var expense in expenses)
+        {
+            <li>
+                @expense.Date.ToShortDateString() -
+                @expense.Description -
+                $@expense.Amount
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    // ---------- Receipt upload ----------
+    private IBrowserFile? selectedFile;
+    private bool canUpload;
+    private string? uploadMessage;
+
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        selectedFile = e.File;
+        canUpload = selectedFile != null;
+        uploadMessage = $"Selected: {selectedFile?.Name}";
+        // Add an await to avoid CS1998 warning
+        await Task.CompletedTask;
+    }
+
+    private async Task UploadReceipt()
+    {
+        if (selectedFile == null)
+            return;
+
+        uploadMessage = "Uploading...";
+
+        try
+        {
+            await ExpenseService.UploadReceiptAsync(selectedFile);
+            uploadMessage = "Receipt uploaded successfully ✅";
+
+            // Reload expenses after upload (optional)
+            //expenses = await ExpenseService.GetExpensesAsync();
+        }
+        catch (Exception ex)
+        {
+            uploadMessage = $"Upload failed: {ex.Message}";
+        }
+    }
+
+    // ---------- Expenses list ----------
+    private List<SmartExpenseTracker.Core.DTOs.ExpenseDto>? expenses;
+
+    protected override async Task OnInitializedAsync()
+    {
+        expenses = await ExpenseService.GetExpensesAsync();
+    }
+}

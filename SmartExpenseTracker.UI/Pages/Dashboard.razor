@@ -1,0 +1,45 @@
+﻿@page "/dashboard"
+@using SmartExpenseTracker.UI.Services
+@inject ExpenseApiService ExpenseService
+@inject IJSRuntime JS
+
+<h3>Your Household Expense Dashboard</h3>
+
+<div class="filters">
+    <label>From:</label>
+    <input type="date" @bind="StartDate" />
+
+    <label>To:</label>
+    <input type="date" @bind="EndDate" />
+
+    <button class="btn btn-primary" @onclick="LoadCharts">
+        Show My Expenses
+    </button>
+</div>
+
+<div class="chart-grid">
+    <canvas id="monthlyChart" width="400" height="400"></canvas>
+    <canvas id="storeChart" width="400" height="400"></canvas>
+    <canvas id="categoryChart" width="400" height="400"></canvas>
+</div>
+
+@code {
+    private DateTime StartDate { get; set; } = new DateTime(2025, 1, 1);
+    private DateTime EndDate { get; set; } = new DateTime(2025, 12, 31);
+
+    private async Task LoadCharts()
+    {
+      
+        // Monthly chart
+        var monthly = await ExpenseService.GetMonthlyExpenses(StartDate, EndDate);
+        await JS.InvokeVoidAsync("renderMonthlyChart", monthly);
+
+        // Store chart
+        var store = await ExpenseService.GetExpenseByStore(StartDate, EndDate);
+        await JS.InvokeVoidAsync("renderStoreChart", store);
+
+        // Category chart (based on selected month)
+        var category = await ExpenseService.GetExpenseByCategory(StartDate, EndDate);
+        await JS.InvokeVoidAsync("renderCategoryChart", category);
+    }
+}

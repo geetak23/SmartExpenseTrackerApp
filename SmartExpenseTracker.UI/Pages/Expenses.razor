@@ -1,0 +1,31 @@
+﻿@page "/expenses"
+@inject SmartExpenseTracker.UI.Services.ExpenseApiService ExpenseService
+
+<h3>Expenses</h3>
+
+@if (expenses == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ul>
+        @foreach (var expense in expenses)
+        {
+            <li>
+                @expense.Date.ToShortDateString() -
+                @expense.Description -
+                $@expense.Amount
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private List<SmartExpenseTracker.Core.DTOs.ExpenseDto>? expenses;
+
+    protected override async Task OnInitializedAsync()
+    {
+        expenses = await ExpenseService.GetExpensesAsync();
+    }
+}
