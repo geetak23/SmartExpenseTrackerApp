@@ -4,13 +4,13 @@ A clean, modern, and intelligent way to understand where your money goes.
 
 SmartExpenseTracker is a full‑stack application that turns messy purchase receipts into structured insights.
 Upload a receipt, let the system analyze it, and instantly explore your spending through interactive dashboards.
-It’s built with real‑world engineering practices — cloud integration, clean architecture, and testability baked in from day one.
+It’s built with real‑world engineering practices — cloud integration, clean architecture, and structured to support clean automated testing.
 ## ✨ Features
 
 ### 📤 Receipt Upload & Secure Storage
 - Upload JPEG, PNG, or PDF receipts from the UI  
-- Files are stored safely in **Azure Blob Storage**  
-- PostgreSQL stores metadata + blob references  
+- Files are stored safely in **Azure Blob Storage**
+- PostgreSQL stores all receipt metadata
 
 ### 🧾 Automated Receipt Analysis
 Extracts and normalizes:
@@ -21,16 +21,17 @@ Extracts and normalizes:
 
 All data is structured into relational tables for clean analytics.
 
+## 🗂️ Data Model
+
+**User → Receipt → ReceiptItem**  
+A simple 1‑to‑many chain that mirrors real‑world spending.
+
 ### 📊 Expense Analytics & Dashboards
 - Monthly spending trends  
 - Category‑wise breakdowns  
 - Top items you spend on  
 - API‑powered charts ready for dashboards
 
-## 🗂️ Data Model
-
-**User → Receipt → ReceiptItem**  
-A simple 1‑to‑many chain that mirrors real‑world spending.
 
 ## 🛠️ Tech Stack
 
