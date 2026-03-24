@@ -1,98 +1,90 @@
-# SmartExpenseTracker
-SmartExpenseTracker is a project born from a simple idea: managing household expenses shouldn’t feel like detective work. We all have receipts scattered in bags, inboxes, and glove compartments — so this app turns that chaos into clean, structured, meaningful insights.
-With a smooth upload experience, automated receipt analysis, and beautiful dashboards, SmartExpenseTracker shows exactly where your money goes and helps you make better spending decisions. It’s built with real-world engineering practices, cloud integration, and testability at its core.
+🧠 Technical Documentation
+# 💰 SmartExpenseTracker  
+A clean, modern, and intelligent way to understand where your money goes.
 
-#What You Can Do with It
-Upload Receipts Effortlessly
-Just drag and drop your receipt (JPEG, PNG, or PDF).
-The app stores it securely in Azure Blob Storage and keeps a reference in PostgreSQL — no clutter, no lost files.
+SmartExpenseTracker is a full‑stack application that turns messy purchase receipts into structured insights.
+Upload a receipt, let the system analyze it, and instantly explore your spending through interactive dashboards.
+It’s built with real‑world engineering practices — cloud integration, clean architecture, and testability baked in from day one.
+## ✨ Features
 
-#Let the System Read Your Receipt
-Behind the scenes, document analysis extracts:
-  Store name, Purchase date,Total amount,Every line item (name, quantity, unit price, total)
-  The data is normalized into relational tables so it’s clean, searchable, and analytics‑ready.
+### 📤 Receipt Upload & Secure Storage
+- Upload JPEG, PNG, or PDF receipts from the UI  
+- Files are stored safely in **Azure Blob Storage**  
+- PostgreSQL stores metadata + blob references  
 
-#Understand Your Spending
-The UI brings your expenses to life with:
-  Monthly spending trends
-  Category‑wise breakdowns
-  Top items you spend on
+### 🧾 Automated Receipt Analysis
+Extracts and normalizes:
+- Store name  
+- Purchase date  
+- Total amount  
+- Line items (name, quantity, unit price, total)
 
-#How the System Is Organized
-SmartExpenseTracker
- ──API Layer
-      Controllers, DTOs, Swagger, Program.cs 
- ──Core Layer
-      Interfaces, Enums, Domain Models 
- ──Infrastructure Layer
-      EF Core DbContext, Entities, Repositories
-      BlobStorageService, ReceiptAnalysisService 
- ──UI (Blazor Server)
-      Pages, Services, Charts, JS/CSS, App.razor
+All data is structured into relational tables for clean analytics.
 
-#Data Model at a Glance
-A simple, intuitive structure:
-  User → Receipt → ReceiptItem  
-  (One user can have many receipts, and each receipt can have many items.)
+### 📊 Expense Analytics & Dashboards
+- Monthly spending trends  
+- Category‑wise breakdowns  
+- Top items you spend on  
+- API‑powered charts ready for dashboards
 
-#Tech Stack
-  Backend
-  ASP.NET Core Web API
-  Entity Framework Core
-  PostgreSQL
-  Azure Blob Storage
-  Swagger / OpenAPI
+## 🗂️ Data Model
 
-#Frontend
-  Blazor Server
-  JavaScript (Chart.js)
-  Bootstrap
+**User → Receipt → ReceiptItem**  
+A simple 1‑to‑many chain that mirrors real‑world spending.
 
-#Cloud & Tools
-  Azure Blob Storage
-  REST APIs
-  Git & GitHub
+## 🛠️ Tech Stack
 
-#Dashboards You’ll See
-  Line chart for monthly spending
-  Donut chart for category distribution
-  Bar chart for top expenses
+### Backend
+- ASP.NET Core Web API  
+- Entity Framework Core  
+- PostgreSQL  
+- Azure Blob Storage  
+- Swagger / OpenAPI  
 
-#Testability & QA Focus
-This project is designed with test automation in mind:
-  API endpoints ready for Postman / REST Assured
-  Clear DTO boundaries
-  Database integrity checks
+### Frontend
+- Blazor Server  
+- Chart.js  
+- Bootstrap  
 
-#Supports automation of:
-Receipt upload flows
-API response validation
-Data persistence verification
+### Cloud & Tooling
+- Azure  
+- REST APIs  
+- Git & GitHub  
 
-#Running the Application
-Prerequisites:
-.NET 7+
-PostgreSQL
-Azure Blob Storage account
+## 📈 Sample Dashboards
+- **Monthly Spend Trend** (Line Chart)  
+- **Category‑wise Expense Split** (Donut Chart)  
+- **Top Expense Items** (Bar Chart)  
 
-#Steps
-> Update appsettings.json with:
-> PostgreSQL connection string
-> Azure Blob Storage connection string
+## 🧪 Testability & QA Focus
+Designed from the ground up for automation:
+- DTO boundaries for clean validation  
+- API endpoints ready for Postman / REST Assured  
+- Database integrity checks  
+- Automated flows for upload → analysis → persistence
 
-> Start API project
-> Start UI project
-> Navigate to:
-  API: https://localhost:{port}/swagger
-  UI: https://localhost:{port}
+## 🚀 Running the Application
 
-#What’s Coming Next - In Progress
-  Smarter Receipt Intelligence
-  Auto‑categorization using Azure AI / OpenAI
-  Duplicate receipt detection
-  Anomaly detection for unusual spending
+### Prerequisites
+- .NET 7+  
+- PostgreSQL  
+- Azure Blob Storage account  
 
-#End‑to‑End Automation
-  Playwright UI tests
-  API contract validation
-  Database persistence checks
+### Setup
+1. Update `appsettings.json` with:
+   - PostgreSQL connection string  
+   - Azure Blob Storage connection string  
+
+2. Start the **API** project  
+3. Start the **UI** project  
+4. Visit:  
+   - API: `https://localhost:{port}/swagger`  
+   - UI: `https://localhost:{port}`
+   
+## 🔮 Upcoming Enhancements (In Progress)
+
+### 🤖 AI‑Powered Receipt Intelligence
+- Duplicate receipt detection  
+- Spending anomaly detection
+- Auto‑categorization using Azure AI / OpenAI  
+
